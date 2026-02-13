@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youth Advocates Network - Empowering Youth for Change</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -22,6 +22,15 @@
                 <li><a href="#events">Events</a></li>
                 <li><a href="#gallery">Gallery</a></li>
                 <li><a href="#contact">Contact</a></li>
+                <li data-role="member-admin" style="display:none;"><a href="#" id="profileLink">Profile</a></li>
+                <li>
+                    <label for="roleSwitch" class="role-label">Role:</label>
+                    <select id="roleSwitch" class="role-switch">
+                        <option value="public">Public</option>
+                        <option value="member">Member</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </li>
                 <li><a href="#" class="btn-nav" id="loginBtn">Login</a></li>
             </ul>
             <div class="hamburger" id="hamburger">
@@ -42,6 +51,46 @@
                     <div class="hero-buttons">
                         <a href="#" class="btn btn-primary" id="applyBtn">Apply for Membership</a>
                         <a href="#about" class="btn btn-secondary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LMS-like Panel (member/admin only) -->
+    <section id="lmsPanel" class="section" data-role="member-admin" style="display:none;">
+        <div class="container">
+            <h2 class="section-title">Capacity Building — Modules</h2>
+            <div id="modulesList" class="programs-grid"></div>
+            <div class="card" style="margin-top:1rem;">
+                <div class="card-body">
+                    <h3>Assignment Submission</h3>
+                    <div class="form-group"><label>Choose Module</label>
+                        <select id="assignModule"></select>
+                    </div>
+                    <div class="form-group"><label>Upload Submission</label><input type="file" id="assignFile"></div>
+                    <button id="submitAssign" class="btn btn-primary">Submit</button>
+                    <div id="submissionStatus"></div>
+                    <button id="downloadCert" class="btn btn-secondary" style="margin-top:1rem;">Download Certificate</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Member Dashboard (registrations, submissions) -->
+    <section id="memberDashboard" class="section" data-role="member-admin" style="display:none;">
+        <div class="container">
+            <h2 class="section-title">Member Dashboard</h2>
+            <div class="card">
+                <div class="card-body">
+                    <h3>Your Event Registrations</h3>
+                    <div class="data-table-container">
+                        <table class="data-table" id="registrationsTable">
+                            <thead>
+                                <tr><th>Event</th><th>Date</th><th>Status</th><th>Action</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -83,7 +132,7 @@
     <section id="spotlight" class="section">
         <div class="container">
             <h2 class="section-title">Spotlighting Some Organizations in YAN</h2>
-            <div class="programs-grid">
+            <div class="programs-grid" id="spotlightGrid">
                 <div class="program-card">
                     <h3>Care and Help Child Organization</h3>
                     <p><strong>From a Single Act of Kindness, a Ripple of Hope.</strong> Founded in 2018, Care and Help Child Organization stands as a beacon of hope for vulnerable children. It is dedicated to breaking barriers to education, ensuring safety, fostering mental well‑being, and empowering young minds to build brighter, more equitable futures.</p>
@@ -111,6 +160,16 @@
                     <p>OAZIS Health is a youth‑led organization addressing urgent health needs of marginalized and impoverished communities. Its vision is a world where everyone has an equal opportunity to live a healthy, dignified, and fulfilling life, and its mission is to save lives and improve health by promoting equity and access for all.</p>
                     <p><strong>Bridging Gaps for Marginalized Communities.</strong></p>
                 </div>
+            </div>
+
+            <div class="spotlight-admin" data-role="admin" style="margin-top:1rem; display:none;">
+                <h3>Manage Spotlight (Admin)</h3>
+                <form id="spotlightForm">
+                    <div class="form-group"><label>Organization Name</label><input type="text" id="spotName" required></div>
+                    <div class="form-group"><label>Short Summary</label><input type="text" id="spotSummary" required></div>
+                    <div class="form-group"><label>Image (optional)</label><input type="file" id="spotImage" accept="image/*"></div>
+                    <button type="button" class="btn btn-primary" id="addSpot">Add Spotlight</button>
+                </form>
             </div>
         </div>
     </section>
@@ -150,7 +209,8 @@
                     </div>
                 </div>
                 <div class="about-image">
-                    <div class="placeholder-image">
+                    <img id="yanCommunityImage" alt="YAN Community" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='640' height='400'><rect width='100%25' height='100%25' fill='%23e6eef8'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='24' fill='%23334'>YAN Community Image Placeholder</text></svg>" onerror="this.style.display='none'">
+                    <div class="placeholder-image" style="display:none;">
                         <p>YAN Community Image</p>
                     </div>
                 </div>
@@ -162,9 +222,9 @@
     <section id="capacity" class="section section-alt">
         <div class="container">
             <h2 class="section-title">Capacity Building Plan</h2>
-            <p><strong>Main Goal:</strong> To strengthen the institutional, managerial, advocacy, and sustainability capacities of YAN member organizations, enabling them to design, implement, manage and sustain impactful community‑driven programmes, effectively engage stakeholders, and amplify youth voice and leadership across Rwanda.</p>
+            <p class="public-summary">A short public summary: YAN runs capacity building for member organizations focused on leadership, project management, and sustainability. Public users can view summaries and upcoming training dates.</p>
 
-            <div class="card" style="margin-top: 2rem;">
+            <div class="card" style="margin-top: 2rem;" data-role="member-admin">
                 <div class="card-body">
                     <h3>The 12‑Month Capacity Building Plan (By Quarter)</h3>
                     <div class="table-container" style="margin-top: 1rem;">
@@ -401,65 +461,6 @@
         </div>
     </section>
 
-    <!-- YAN Communication Section -->
-    <section id="communication" class="section">
-        <div class="container">
-            <h2 class="section-title">YAN Communication</h2>
-
-            <div class="card" style="margin-top: 1.5rem;">
-                <div class="card-body">
-                    <h3>Quarter 1: Foundations, Leadership, and Resilience</h3>
-                    <p>This quarter serves as the heart of the curriculum, focusing on the human element of advocacy. It ensures youth leaders have emotional maturity and mental strength to lead in high‑pressure environments and avoid burnout.</p>
-                    <p><strong>Sub‑topics:</strong> Public speaking, group facilitation, conflict resolution, active listening, empathy, stress management, problem‑solving in resource‑scarce environments.</p>
-                    <ol>
-                        <li>Empower young leaders with soft skills to manage diverse teams and facilitate inclusive dialogues.</li>
-                        <li>Provide mental health awareness and stress‑management tools to reduce burnout.</li>
-                        <li>Build a culture of collaborative leadership with shared power.</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="card" style="margin-top: 1.5rem;">
-                <div class="card-body">
-                    <h3>Quarter 2: Project Design, Management, and M&amp;E</h3>
-                    <p>This quarter professionalizes how youth initiatives are implemented, aligning with evidence‑based standards recognized by partners and donors.</p>
-                    <p><strong>Sub‑topics:</strong> Community needs assessment, Theory of Change, LogFrame design, baseline data collection, qualitative/quantitative reporting.</p>
-                    <ol>
-                        <li>Teach structured project design and rigorous implementation planning.</li>
-                        <li>Establish standardized Monitoring, Evaluation, and Learning (MEL) practices.</li>
-                        <li>Train organizations to verify community needs before implementation.</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="card" style="margin-top: 1.5rem;">
-                <div class="card-body">
-                    <h3>Quarter 3: Financial Accountability and Resource Mobilization</h3>
-                    <p>This quarter builds the engine of sustainability through transparency, audit‑readiness, and diversified funding.</p>
-                    <p><strong>Sub‑topics:</strong> Bookkeeping, transparent financial procedures, record‑keeping, grant writing, donor mapping, social enterprise/income‑generation models.</p>
-                    <ol>
-                        <li>Standardize bookkeeping and financial record‑keeping across the network.</li>
-                        <li>Diversify funding streams beyond traditional donations.</li>
-                        <li>Build grant‑writing skills to compete for international funding.</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="card" style="margin-top: 1.5rem;">
-                <div class="card-body">
-                    <h3>Quarter 4: Digital Advocacy, Inclusion, and Strategic Planning</h3>
-                    <p>This quarter focuses on scaling impact and securing long‑term organizational sustainability.</p>
-                    <p><strong>Sub‑topics:</strong> Social media strategy, digital storytelling, safeguarding policies, disability inclusion, gender awareness, succession planning/governance structures.</p>
-                    <ol>
-                        <li>Increase digital visibility of youth‑led successes through strategic storytelling.</li>
-                        <li>Institutionalize safeguarding and inclusion policies.</li>
-                        <li>Develop long‑term strategic plans and succession models.</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Programs Section -->
     <section id="programs" class="section section-alt">
         <div class="container">
@@ -511,6 +512,7 @@
                     <div class="opportunity-footer">
                         <span class="deadline">Deadline: March 15, 2026</span>
                         <a href="#" class="btn-link">Learn More →</a>
+                        <button class="btn btn-primary registerBtn" data-event-id="innovation-2026" data-role="member-admin" style="display:none;">Register</button>
                     </div>
                 </div>
                 <div class="opportunity-card">
@@ -520,6 +522,7 @@
                     <div class="opportunity-footer">
                         <span class="deadline">Starts: February 25, 2026</span>
                         <a href="#" class="btn-link">Learn More →</a>
+                        <button class="btn btn-primary registerBtn" data-event-id="digital-bootcamp-2026" data-role="member-admin" style="display:none;">Register</button>
                     </div>
                 </div>
                 <div class="opportunity-card">
@@ -529,11 +532,27 @@
                     <div class="opportunity-footer">
                         <span class="deadline">Apply by: Feb 20, 2026</span>
                         <a href="#" class="btn-link">Learn More →</a>
+                        <button class="btn btn-primary registerBtn" data-event-id="regional-summit-2026" data-role="member-admin" style="display:none;">Register</button>
                     </div>
                 </div>
             </div>
             <div class="section-cta">
                 <a href="opportunities.html" class="btn btn-primary">View All Opportunities</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Panel: Vetting Criteria -->
+    <section id="adminPanel" class="section" data-role="admin" style="display:none;">
+        <div class="container">
+            <h2 class="section-title">Admin — Vetting Criteria</h2>
+            <div class="card">
+                <div class="card-body">
+                    <p>Paste or upload vetting criteria (admin only).</p>
+                    <div class="form-group"><textarea id="vettingText" rows="6" style="width:100%"></textarea></div>
+                    <div class="form-group"><label>Upload Criteria Document</label><input type="file" id="vettingDoc" accept=".pdf,.doc,.docx"></div>
+                    <button id="saveVetting" class="btn btn-primary">Save</button>
+                </div>
             </div>
         </div>
     </section>
@@ -754,6 +773,18 @@
                         <label>Organization Name *</label>
                         <input type="text" id="appOrgName" required>
                     </div>
+                        <div class="form-group">
+                            <label>Reference Letter (PDF)</label>
+                            <input type="file" id="appRefLetter" accept=".pdf,.doc,.docx">
+                        </div>
+                        <div class="form-group">
+                            <label>Letter of Registration (PDF)</label>
+                            <input type="file" id="appRegLetter" accept=".pdf,.doc,.docx">
+                        </div>
+                        <div class="form-group">
+                            <label>Other Documents (optional)</label>
+                            <input type="file" id="appOtherDocs" multiple>
+                        </div>
                     <div class="form-group">
                         <label>Your Role in Organization *</label>
                         <input type="text" id="appRole" required>
@@ -820,6 +851,7 @@
         <div id="lightboxCaption"></div>
     </div>
 
+    <script src="main.js"></script>
     <script src="apps.js"></script>
 </body>
 </html>

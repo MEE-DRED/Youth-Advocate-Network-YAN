@@ -1372,3 +1372,17 @@ img {
         margin-left: 0;
     }
 }
+
+/* Additional small UI tweaks for role switch, spotlight admin and registers */
+.role-switch {
+    background: white;
+    color: var(--secondary-color);
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-weight: 600;
+}
+.role-label{color:white;margin-right:6px;font-weight:600}
+.spotlight-admin .form-group{margin-bottom:0.75rem}
+.submission-status{margin-top:0.5rem;color:var(--success-color);font-weight:600}
+.registerBtn{white-space:nowrap}
